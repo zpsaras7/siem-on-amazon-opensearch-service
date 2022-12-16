@@ -1,0 +1,65 @@
+{
+  "name": "cloudformation-python",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "extensions": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "amazonwebservices.aws-toolkit-vscode",
+    "GitHub.vscode-pull-request-github",
+    "redhat.vscode-yaml",
+    "kddejong.vscode-cfn-lint",
+    "aws-scripting-guy.cform"
+  ],
+  "settings": {
+    "cfnLint.validateUsingJsonSchema": true,
+    "cfnLint.path": "/usr/local/bin/cfn-lint",
+    "files.associations": {
+      "file:///workspaces/siem-on-amazon-opensearch-service/deployment/siem-on-amazon-opensearch-service.template": "json",
+      "file:///workspaces/siem-on-amazon-opensearch-service/deployment/siem-on-amazon-opensearch-service-tokyo.yaml": "yaml",
+      "file:///workspaces/siem-on-amazon-opensearch-service/deployment/siem-on-amazon-opensearch-service-import-exist-s3bucket.template": "yaml"
+    },
+    // Custom tags for the parser to use
+    // "yaml.customTags": [
+    //   "!And",
+    //   "!If",
+    //   "!Not",
+    //   "!Equals",
+    //   "!Or",
+    //   "!FindInMap sequence",
+    //   "!Base64",
+    //   "!Cidr",
+    //   "!Ref",
+    //   "!Sub",
+    //   "!GetAtt",
+    //   "!GetAZs",
+    //   "!ImportValue",
+    //   "!Select",
+    //   "!Select sequence",
+    //   "!Split",
+    //   "!Join sequence"
+    // ],
+    // Enable/disable default YAML formatter (requires restart)
+    "yaml.format.enable": true,
+    "yaml.schemas": {
+      "https://raw.githubusercontent.com/awslabs/goformation/master/schema/cloudformation.schema.json": [
+        "../deployment/*.template",
+        "../deployment/*.json"
+      ]
+    }
+  },
+  // Mount the ~/.aws directory to our container so we can use our AWS Credentials
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.aws/,target=/root/.aws,type=bind,consistency=cached"
+  ],
+  // Container ENV variables for project specifics (defaults to my sandbox AWS account)
+  "remoteEnv": {
+    "AWS_DEFAULT_REGION": "ap-northeast-1"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:1": {},
+    "ghcr.io/devcontainers/features/aws-cli:1": {}
+  }
+}
